@@ -1,0 +1,28 @@
+<?php
+/**
+ *
+ * @author  R. Dale Owen   @mediotype
+ * @var $this Mage_Checkout_Block_Cart
+ */
+?>
+<script type="text/javascript">
+    //<![CDATA[
+    //traditional magento checkout is billing, shipping, shipping options, payment
+    $$('#co-payment-form .button').each(function(item){
+        item.originonclick = item.onclick;
+        item.onclick = function() {
+            var payOption = $$('#co-payment-form input[checked=checked]');
+            ga('ec:setAction', 'checkout_option', {
+                'step': 4,
+                'option': payOption[0].value
+            });
+            item.onclick = item.originonclick;
+            ga('send', 'event', 'Checkout', 'Option',{
+                'hitCallback': function() {
+                    item.click(item.originonclick);
+                }
+            });
+        }
+    });
+    //]]>
+</script>
